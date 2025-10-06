@@ -1,0 +1,158 @@
+﻿@{
+    // الحصول على مسار الصفحة الحالية لتمييز الرابط النشط
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - منصة ICT الرقمية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        /* Custom styles for the glassmorphism navbar */
+        .glass-nav {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                bottom: -4px;
+                right: 0;
+                width: 0;
+                height: 2px;
+                background: linear-gradient(to left, #4f46e5, #a855f7);
+                transition: width 0.3s ease-in-out;
+            }
+
+            .nav-link:hover::after,
+            .nav-link-active::after {
+                width: 100%;
+            }
+
+        .nav-link-active {
+            color: #4338ca; /* indigo-700 */
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <header class="glass-nav shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <a asp-page="/Index" class="flex-shrink-0 font-bold text-2xl text-indigo-600 hover:text-indigo-700 transition-colors">
+                        <i class="fas fa-laptop-code mr-2"></i>
+                        منصة ICT الرقمية
+                    </a>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 space-x-reverse">
+                        <a asp-page="/Index" class="nav-link px-3 py-2 text-sm font-medium @(currentPage == "/Index" ? "nav-link-active" : "text-gray-500 hover:text-indigo-600")"><i class="fas fa-home mr-1"></i> الرئيسية</a>
+                        <a asp-page="/Learn/Index" class="nav-link px-3 py-2 text-sm font-medium @(currentPage == "/Learn/Index" ? "nav-link-active" : "text-gray-500 hover:text-indigo-600")"><i class="fas fa-book-reader mr-1"></i> ابدأ التعلم</a>
+                        <a asp-page="/Glossary" class="nav-link px-3 py-2 text-sm font-medium @(currentPage == "/Glossary" ? "nav-link-active" : "text-gray-500 hover:text-indigo-600")"><i class="fas fa-search mr-1"></i> المصطلحات</a>
+                        <a asp-page="/About" class="nav-link px-3 py-2 text-sm font-medium @(currentPage == "/About" ? "nav-link-active" : "text-gray-500 hover:text-indigo-600")"><i class="fas fa-user-circle mr-1"></i> من نحن</a>
+                    </div>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">فتح القائمة الرئيسية</span>
+                        <i id="hamburger-icon" class="fas fa-bars h-6 w-6 block"></i>
+                        <i id="close-icon" class="fas fa-times h-6 w-6 hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu, shows and hides based on state -->
+        <div class="hidden md:hidden" id="mobile-menu" style="transition: max-height 0.3s ease-in-out; max-height: 0; overflow: hidden;">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t">
+                <a asp-page="/Index" class="block px-3 py-2 rounded-md text-base font-medium transition-colors @(currentPage == "/Index" ? "bg-indigo-50 text-indigo-700" : "text-gray-600 hover:bg-gray-100")">الرئيسية</a>
+                <a asp-page="/Learn/Index" class="block px-3 py-2 rounded-md text-base font-medium transition-colors @(currentPage == "/Learn/Index" ? "bg-indigo-50 text-indigo-700" : "text-gray-600 hover:bg-gray-100")">ابدأ التعلم</a>
+                <a asp-page="/Glossary" class="block px-3 py-2 rounded-md text-base font-medium transition-colors @(currentPage == "/Glossary" ? "bg-indigo-50 text-indigo-700" : "text-gray-600 hover:bg-gray-100")">مسرد المصطلحات</a>
+                <a asp-page="/About" class="block px-3 py-2 rounded-md text-base font-medium transition-colors @(currentPage == "/About" ? "bg-indigo-50 text-indigo-700" : "text-gray-600 hover:bg-gray-100")">من نحن</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-slate-800 text-white mt-12">
+        <div class="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-right">
+                <div>
+                    <h3 class="font-bold text-lg text-indigo-400">منصة ICT الرقمية</h3>
+                    <p class="mt-2 text-sm text-slate-300">
+                        تحويل التعليم إلى تجربة تفاعلية وممتعة لطلاب تكنولوجيا المعلومات.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-indigo-400">روابط سريعة</h3>
+                    <ul class="mt-2 space-y-1 text-sm">
+                        <li><a asp-page="/Index" class="text-slate-300 hover:text-white">الرئيسية</a></li>
+                        <li><a asp-page="/Learn/Index" class="text-slate-300 hover:text-white">ابدأ التعلم</a></li>
+                        <li><a asp-page="/Glossary" class="text-slate-300 hover:text-white"> المصطلحات</a></li>
+                        <li><a asp-page="/About" class="text-slate-300 hover:text-white">من نحن</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-indigo-400">تواصل معنا</h3>
+                    <div class="mt-2 flex justify-center md:justify-start space-x-4 space-x-reverse">
+                        <a href="#" class="text-slate-300 hover:text-white"><i class="fab fa-linkedin-in text-xl"></i></a>
+                        <a href="#" class="text-slate-300 hover:text-white"><i class="fab fa-github text-xl"></i></a>
+                        <a href="https://wa.me/+201010475455" target="_blank" class="text-slate-300 hover:text-white"><i class="fab fa-whatsapp text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-slate-700 pt-4 text-center text-sm text-slate-400">
+                &copy; @DateTime.Now.Year - منصة ICT الرقمية - جميع الحقوق محفوظة
+            </div>
+        </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const closeIcon = document.getElementById('close-icon');
+
+            mobileMenuButton.addEventListener('click', () => {
+                const isMenuOpen = mobileMenu.style.maxHeight !== '0px';
+                if (isMenuOpen) {
+                    mobileMenu.style.maxHeight = '0px';
+                } else {
+                    mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                }
+                hamburgerIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
+

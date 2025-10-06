@@ -1,0 +1,39 @@
+﻿@page "{id:int}"
+@model IctApp.Areas.Admin.Pages.Lessons.EditModel
+@{
+    ViewData["Title"] = "تعديل الدرس";
+}
+
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">تعديل الدرس</h1>
+
+    <div class="bg-white p-8 rounded-xl shadow-md">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm mb-4"></div>
+            <input type="hidden" asp-for="Lesson.Id" />
+
+            <div class="mb-4">
+                <label asp-for="Lesson.Title" class="block text-gray-700 text-sm font-bold mb-2">عنوان الدرس</label>
+                <input asp-for="Lesson.Title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-indigo-500" />
+                <span asp-validation-for="Lesson.Title" class="text-red-600 text-xs"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Lesson.UnitId" class="block text-gray-700 text-sm font-bold mb-2">الوحدة الدراسية</label>
+                <select asp-for="Lesson.UnitId" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-indigo-500" asp-items="ViewBag.UnitId"></select>
+                <span asp-validation-for="Lesson.UnitId" class="text-red-600 text-xs"></span>
+            </div>
+
+            <div class="mb-6">
+                <label asp-for="Lesson.Content" class="block text-gray-700 text-sm font-bold mb-2">محتوى الدرس (HTML)</label>
+                <textarea asp-for="Lesson.Content" rows="10" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-indigo-500"></textarea>
+                <span asp-validation-for="Lesson.Content" class="text-red-600 text-xs"></span>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <input type="submit" value="حفظ التعديلات" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors cursor-pointer" />
+                <a asp-page="./Index" class="text-gray-600 hover:text-indigo-600 font-semibold">العودة إلى القائمة</a>
+            </div>
+        </form>
+    </div>
+</div>

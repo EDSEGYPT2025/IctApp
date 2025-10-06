@@ -1,0 +1,56 @@
+﻿@page "{id:int}"
+@model IctApp.Areas.Admin.Pages.Questions.EditModel
+@{
+    ViewData["Title"] = "تعديل السؤال";
+}
+
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">تعديل السؤال</h1>
+
+    <div class="bg-white p-8 rounded-xl shadow-md">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm mb-4"></div>
+            <input type="hidden" asp-for="Question.Id" />
+
+            <div class="mb-4">
+                <label asp-for="Question.UnitId" class="block text-gray-700 text-sm font-bold mb-2">الوحدة الدراسية</label>
+                <select asp-for="Question.UnitId" class="shadow border rounded w-full py-2 px-3 text-gray-700" asp-items="ViewBag.UnitId"></select>
+                <span asp-validation-for="Question.UnitId" class="text-red-600 text-xs"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Question.QuestionText" class="block text-gray-700 text-sm font-bold mb-2">نص السؤال</label>
+                <input asp-for="Question.QuestionText" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+                <span asp-validation-for="Question.QuestionText" class="text-red-600 text-xs"></span>
+            </div>
+
+            <div class="mb-6">
+                <label asp-for="Question.Explanation" class="block text-gray-700 text-sm font-bold mb-2">شرح الإجابة</label>
+                <textarea asp-for="Question.Explanation" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"></textarea>
+                <span asp-validation-for="Question.Explanation" class="text-red-600 text-xs"></span>
+            </div>
+
+            <hr class="my-6" />
+            <h3 class="text-xl font-bold text-gray-800 mb-4">الخيارات</h3>
+
+            <div class="space-y-4">
+                @for (int i = 0; i < Model.Question.Options.Count; i++)
+                {
+                    <div class="flex items-center gap-4">
+                        <input type="hidden" asp-for="Question.Options[i].Id" />
+                        <input asp-for="Question.Options[i].OptionText" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" placeholder="نص الخيار @(i+1)" />
+                        <div class="flex items-center">
+                            <input type="radio" asp-for="CorrectOptionId" value="@Model.Question.Options[i].Id" class="ml-2" />
+                            <label class="text-sm">إجابة صحيحة</label>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="flex items-center justify-between mt-8">
+                <input type="submit" value="حفظ التعديلات" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors cursor-pointer" />
+                <a asp-page="./Index" class="text-gray-600 hover:text-indigo-600 font-semibold">العودة إلى القائمة</a>
+            </div>
+        </form>
+    </div>
+</div>

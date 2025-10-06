@@ -1,0 +1,77 @@
+﻿@page
+@model IctApp.Areas.Admin.Pages.Units.IndexModel
+@{
+    ViewData["Title"] = "إدارة الوحدات";
+}
+
+<style>
+    /* Staggered row animation */
+    .table-row-animated {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    @@keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="container mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">إدارة الوحدات</h1>
+            <p class="text-gray-500 mt-1">عرض وتعديل الوحدات الدراسية في المنصة.</p>
+        </div>
+        <a asp-page="Create" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors transform hover:scale-105">
+            <i class="fas fa-plus mr-2"></i> إضافة وحدة جديدة
+        </a>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                        <th class="px-6 py-4 text-right text-sm font-semibold uppercase tracking-wider">
+                            عنوان الوحدة
+                        </th>
+                        <th class="px-6 py-4 text-right text-sm font-semibold uppercase tracking-wider">
+                            الصف الدراسي
+                        </th>
+                        <th class="px-6 py-4 text-center text-sm font-semibold uppercase tracking-wider">
+                            الإجراءات
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var (item, index) in Model.Units.Select((item, index) => (item, index)))
+                    {
+                        <tr class="hover:bg-gray-50 table-row-animated" style="animation-delay: @(index * 50)ms">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <p class="text-gray-900 font-semibold">@item.Title</p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <p class="text-gray-700">@item.Grade.Title</p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                <a asp-page="./Edit" asp-route-id="@item.Id" class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200 transition-colors" title="تعديل">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    <span class="mr-2">تعديل</span>
+                                </a>
+                                <a asp-page="./Delete" asp-route-id="@item.Id" class="inline-flex items-center px-4 py-2 bg-red-100 text-red-800 rounded-md hover:bg-red-200 transition-colors mr-3" title="حذف">
+                                    <i class="fas fa-trash-alt"></i>
+                                    <span class="mr-2">حذف</span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

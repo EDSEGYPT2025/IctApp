@@ -1,0 +1,137 @@
+﻿@page "/Learn/Grade/{gradeId:int}"
+@model IctApp.Pages.Learn.GradeModel
+@{
+    ViewData["Title"] = Model.CurrentGradeTitle;
+}
+
+<style>
+    /* Custom styles for animations and transitions */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .prose h3 {
+        color: #4f46e5; /* indigo-600 */
+    }
+
+    .prose p {
+        line-height: 1.75;
+    }
+
+    .slide-down {
+        max-height: 500px; /* Adjust as needed */
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+    }
+
+    .slide-up {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+    }
+</style>
+
+<div dir="rtl" class="flex flex-col md:flex-row gap-6">
+    <!-- الشريط الجانبي للوحدات والدروس -->
+    <aside class="w-full md:w-1/3 lg:w-1/4 bg-white p-4 rounded-xl shadow-lg md:sticky md:top-24 self-start">
+        <h2 class="text-xl font-bold mb-4 text-gray-800 border-b pb-2">@Model.CurrentGradeTitle</h2>
+        <ul class="space-y-2">
+            @foreach (var unit in Model.Units)
+            {
+                <li class="bg-gray-50 rounded-lg">
+                    <a asp-page="/Learn/Grade" asp-route-gradeId="@Model.CurrentGradeId" asp-route-unitId="@unit.Id"
+                       class="flex items-center justify-between font-semibold p-3 rounded-lg transition-all duration-200 @(Model.SelectedUnit?.Id == unit.Id ? "bg-indigo-600 text-white shadow-md" : "bg-gray-100 text-gray-700 hover:bg-indigo-100 hover:text-indigo-700")">
+                        <div class="flex items-center">
+                            <i class="fas fa-layer-group ml-3"></i>
+                            <span>@unit.Title</span>
+                        </div>
+                        <i class="fas @(Model.SelectedUnit?.Id == unit.Id ? "fa-chevron-down" : "fa-chevron-left")"></i>
+                    </a>
+
+                    <!-- قائمة الدروس المنسدلة -->
+                    <div class="@(Model.SelectedUnit?.Id == unit.Id ? "slide-down" : "slide-up")">
+                        <ul class="pt-2 pr-4 border-r-2 border-indigo-200 mr-4 mt-1 space-y-2">
+                            @foreach (var lesson in unit.Lessons)
+                            {
+                                <li>
+                                    <a asp-page="/Learn/Grade" asp-route-gradeId="@Model.CurrentGradeId" asp-route-unitId="@unit.Id" asp-route-lessonId="@lesson.Id"
+                                       class="flex items-center p-2 rounded-md text-sm transition-colors duration-200 @(Model.SelectedLesson?.Id == lesson.Id ? "bg-indigo-100 text-indigo-800 font-bold" : "text-gray-600 hover:bg-gray-200")">
+                                        <i class="fas fa-book-reader ml-2 text-indigo-500"></i>
+                                        @lesson.Title
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                        <!-- زر اختبار الوحدة -->
+                        @if (unit.QuizQuestions.Any())
+                        {
+                            <div class="px-4 py-3 text-center">
+                                <a asp-page="/Quiz" asp-route-unitId="@unit.Id"
+                                   class="inline-block w-full text-center px-4 py-2 bg-green-500 text-white text-sm font-bold rounded-lg shadow-md hover:bg-green-600 transition-all duration-300 transform hover:scale-105">
+                                    <i class="fas fa-rocket mr-1"></i>
+                                    اختبار الوحدة
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    </aside>
+
+    <!-- منطقة عرض المحتوى -->
+    <main class="w-full md:w-2/3 lg:w-3/4">
+        <div class="bg-white p-6 rounded-xl shadow-lg min-h-[60vh] fade-in">
+            @if (Model.SelectedLesson != null)
+            {
+                <h1 class="text-3xl font-extrabold text-gray-900 mb-6 border-b-2 border-indigo-500 pb-3">@Model.SelectedUnit?.Title</h1>
+                <div id="lesson-content">
+                    <h2 class="text-2xl font-bold text-indigo-700 mb-4">@Model.SelectedLesson.Title</h2>
+                    <div class="prose max-w-none text-gray-700 leading-relaxed">
+                        @Html.Raw(Model.SelectedLesson.Content)
+                    </div>
+                </div>
+            }
+            else if (Model.SelectedUnit != null)
+            {
+                <!-- عرض قائمة الدروس عند تحديد وحدة -->
+                <h1 class="text-3xl font-extrabold text-gray-900 mb-6 border-b-2 border-indigo-500 pb-3">@Model.SelectedUnit.Title</h1>
+                <h2 class="text-2xl font-bold text-gray-800 mb-5">دروس الوحدة</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    @foreach (var lesson in Model.SelectedUnit.Lessons)
+                    {
+                        <a asp-page="/Learn/Grade" asp-route-gradeId="@Model.CurrentGradeId" asp-route-unitId="@Model.SelectedUnit.Id" asp-route-lessonId="@lesson.Id"
+                           class="block p-5 bg-gray-50 rounded-xl hover:bg-indigo-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-book text-indigo-500 text-xl ml-3"></i>
+                                <span class="text-lg font-semibold text-indigo-800">@lesson.Title</span>
+                            </div>
+                            <p class="text-sm text-gray-500">اضغط هنا لبدء الدرس</p>
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-20 flex flex-col items-center h-full justify-center">
+                    <i class="fas fa-hand-point-right text-6xl text-indigo-400 mb-6 animate-pulse"></i>
+                    <h1 class="text-3xl font-bold text-gray-800">أهلاً بك في @Model.CurrentGradeTitle</h1>
+                    <p class="text-gray-500 mt-3 text-lg">يرجى اختيار وحدة من القائمة الجانبية لبدء رحلتك التعليمية.</p>
+                </div>
+            }
+    </main>
+</div>
+</div>
+

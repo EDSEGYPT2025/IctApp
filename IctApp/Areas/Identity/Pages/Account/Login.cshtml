@@ -1,0 +1,92 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "تسجيل الدخول";
+    Layout = "/Areas/Admin/Pages/Shared/_AdminLayout.cshtml"; // تحديد قالب لوحة التحكم لهذه الصفحة
+
+}
+
+<style>
+    .form-input-container {
+        position: relative;
+    }
+
+        .form-input-container i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af; /* gray-400 */
+        }
+
+    .form-input {
+        padding-right: 2.5rem; /* Space for the icon */
+    }
+</style>
+
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 -mt-20">
+    <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl">
+        <div>
+            <div class="text-center">
+                <i class="fas fa-laptop-code text-5xl text-indigo-600"></i>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    تسجيل الدخول إلى المنصة
+                </h2>
+                <p class="mt-2 text-center text-sm text-gray-600">
+                    أو
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="font-medium text-indigo-600 hover:text-indigo-500">
+                        قم بإنشاء حساب جديد
+                    </a>
+                </p>
+            </div>
+        </div>
+        <form id="account" method="post" class="mt-8 space-y-6">
+            <div asp-validation-summary="ModelOnly" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"></div>
+            <div class="rounded-md shadow-sm">
+                <div class="form-input-container mb-4">
+                    <label asp-for="Input.Email" class="sr-only">البريد الإلكتروني</label>
+                    <i class="fas fa-envelope"></i>
+                    <input asp-for="Input.Email" class="form-input appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="البريد الإلكتروني" required autocomplete="email" />
+                    <span asp-validation-for="Input.Email" class="text-red-600 text-xs pt-1 block"></span>
+                </div>
+                <div class="form-input-container">
+                    <label asp-for="Input.Password" class="sr-only">كلمة المرور</label>
+                    <i class="fas fa-lock"></i>
+                    <input asp-for="Input.Password" class="form-input appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="كلمة المرور" required autocomplete="current-password" />
+                    <span asp-validation-for="Input.Password" class="text-red-600 text-xs pt-1 block"></span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input asp-for="Input.RememberMe" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                    <label asp-for="Input.RememberMe" class="ml-2 mr-2 block text-sm text-gray-900">
+                        تذكرني
+                    </label>
+                </div>
+
+                <div class="text-sm">
+                    <a id="forgot-password" asp-page="./ForgotPassword" class="font-medium text-indigo-600 hover:text-indigo-500">
+                        هل نسيت كلمة المرور؟
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <button id="login-submit" type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-lg font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <i class="fas fa-lock h-5 w-5 text-indigo-500 group-hover:text-indigo-400"></i>
+                    </span>
+                    تسجيل الدخول
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

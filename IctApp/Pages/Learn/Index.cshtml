@@ -1,0 +1,50 @@
+﻿@page
+@model IctApp.Pages.Learn.IndexModel
+@{
+    ViewData["Title"] = "ابدأ التعلم";
+}
+
+<style>
+    .stage-card {
+        transition: all 0.3s ease-in-out;
+    }
+
+        .stage-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.2); /* indigo shadow */
+        }
+</style>
+
+<div class="fade-in-up">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">اختر المرحلة الدراسية</h1>
+        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+            ابدأ رحلتك التعليمية باختيار المرحلة المناسبة لك.
+        </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            @foreach (var stage in Model.Stages)
+            {
+                <a asp-page="/Learn/Stage" asp-route-stageId="@stage.Id" class="stage-card block bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="p-8">
+                        <div class="flex items-center gap-5">
+                            <div class="flex-shrink-0 bg-indigo-100 text-indigo-600 rounded-xl h-16 w-16 flex items-center justify-center">
+                                <i class="fas fa-graduation-cap text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">@stage.Title</h3>
+                                <p class="mt-1 text-gray-500">عرض الصفوف الدراسية المتاحة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-8 py-3">
+                        <span class="font-semibold text-indigo-600">اكتشف الآن <i class="fas fa-arrow-left mr-2"></i></span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
